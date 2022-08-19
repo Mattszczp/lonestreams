@@ -12,7 +12,9 @@ const createTwitchApiClient = () => {
 
 export const getTwitchCategories = async () => {
   const client = createTwitchApiClient();
-  const res = await client.games.getTopGames();
+  const res = await client.games.getTopGames({
+    limit: 100,
+  });
 
   return res.data.map((game) => {
     return {
