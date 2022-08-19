@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { trpc } from "../utils/trpc";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const CategoryListItem: React.FC<{
   id: string;
@@ -11,7 +12,7 @@ const CategoryListItem: React.FC<{
   coverArtUrl: string;
 }> = ({ id, name, coverArtUrl }) => {
   return (
-    <li key={id} className="flex flex-col m-2 w-44">
+    <div key={id} className="flex flex-col m-2 w-44">
       <Link href={`/category/${name}`}>
         <Image
           src={coverArtUrl}
@@ -26,16 +27,20 @@ const CategoryListItem: React.FC<{
           {name}
         </span>
       </Link>
-    </li>
+    </div>
   );
 };
 
 const Home: NextPage = () => {
-  const { data } = trpc.useQuery(["twitch.categories"], {
-    refetchInterval: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  });
+  const { data, hasNextPage, fetchNextPage } = trpc.useInfiniteQuery(
+    ["twitch.categories", { limit: 45 }],
+    {
+      refetchInterval: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
   return (
     <>
       <Head>
@@ -47,17 +52,26 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <ul className="flex flex-row flex-wrap justify-between">
-          {data &&
-            data.map((category, i) => (
-              <CategoryListItem
-                key={i}
-                id={category.id}
-                name={category.name}
-                coverArtUrl={category.coverArtUrl}
-              />
-            ))}
-        </ul>
+        {data && (
+          <InfiniteScroll
+            hasMore={hasNextPage !== undefined && hasNextPage}
+            next={fetchNextPage}
+            loader={<span>...</span>}
+            dataLength={data.pages.length}
+            className="flex flex-row flex-wrap justify-between"
+          >
+            {data.pages.map((page) =>
+              page.categories.map((category, i) => (
+                <CategoryListItem
+                  key={i}
+                  id={category.id}
+                  name={category.name}
+                  coverArtUrl={category.coverArtUrl}
+                />
+              ))
+            )}
+          </InfiniteScroll>
+        )}
       </main>
     </>
   );

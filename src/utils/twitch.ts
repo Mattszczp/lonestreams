@@ -10,19 +10,26 @@ const createTwitchApiClient = () => {
   return new ApiClient({ authProvider });
 };
 
-export const getTwitchCategories = async () => {
+export const getTwitchCategories = async (
+  limit?: number | null,
+  cursor?: string | null
+) => {
   const client = createTwitchApiClient();
   const res = await client.games.getTopGames({
-    limit: 100,
+    limit: limit ? limit : 50,
+    after: cursor ? cursor : undefined,
   });
 
-  return res.data.map((game) => {
-    return {
-      id: game.id,
-      name: game.name,
-      coverArtUrl: game.getBoxArtUrl(285, 380),
-    };
-  });
+  return {
+    categories: res.data.map((game) => {
+      return {
+        id: game.id,
+        name: game.name,
+        coverArtUrl: game.getBoxArtUrl(285, 380),
+      };
+    }),
+    nextCursor: res.cursor,
+  };
 };
 
 export const getLonelyStreams = async (categoryName: string) => {

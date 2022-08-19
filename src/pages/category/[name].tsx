@@ -23,9 +23,7 @@ const Category: NextPage = () => {
         <meta name="description" content={`Lonely ${name} streams`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <span>Hello World!</span>
-      </main>
+      <main></main>
     </>
   );
 };
