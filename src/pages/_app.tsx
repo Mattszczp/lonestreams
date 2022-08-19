@@ -18,13 +18,10 @@ const MyApp: AppType = ({
 };
 
 const getBaseUrl = () => {
-  if (process.env.VERCEL_URL)
-    return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  else if (typeof window !== undefined)
-    return `http://localhost:${
-      process.env.PORT ?? 3000
-    }`; // dev SSR should use localhost
-  else return ""; // browser should use relative url
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+  if (typeof window !== undefined)
+    return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+  return ""; // browser should use relative url
 };
 
 export default withTRPC<AppRouter>({
