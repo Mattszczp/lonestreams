@@ -47,7 +47,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <ul className="flex flex-row flex-wrap">
+        <ul className="flex flex-row flex-wrap justify-between">
           {data &&
             data.map((category, i) => (
               <CategoryListItem
