@@ -5,7 +5,7 @@ import { z } from "zod";
 export const twitchRouter = createRouter()
   .query("categories", {
     input: z.object({
-      limit: z.number().min(1).max(100).nullish(),
+      limit: z.number().min(1).max(100),
       cursor: z.string().nullish(),
     }),
     resolve({ input }) {
@@ -15,7 +15,7 @@ export const twitchRouter = createRouter()
   .query("streams", {
     input: z.object({
       category: z.string(),
-      limit: z.number().min(1).max(100).nullish(),
+      limit: z.number().min(1).max(100),
       cursor: z.string().nullish(),
     }),
     resolve({ input }) {
