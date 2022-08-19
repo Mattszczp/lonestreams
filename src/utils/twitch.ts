@@ -33,14 +33,13 @@ export const getLonelyStreams = async (categoryId: string) => {
 
   const border = res.data.findIndex((r) => r.viewers < 50);
   const streams = res.data.slice(border, res.data.length - 1);
-  console.log(
-    streams.map((stream) => {
-      return {
-        id: stream.id,
-        name: stream.userDisplayName,
-        viewers: stream.viewers,
-        thumbnailUrl: stream.getThumbnailUrl(440, 248),
-      };
-    })
-  );
+
+  return streams.map((stream) => {
+    return {
+      id: stream.id,
+      name: stream.userDisplayName,
+      viewers: stream.viewers,
+      thumbnailUrl: stream.getThumbnailUrl(440, 248),
+    };
+  });
 };
