@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { trpc } from "../utils/trpc";
 
@@ -11,16 +12,20 @@ const CategoryListItem: React.FC<{
 }> = ({ id, name, coverArtUrl }) => {
   return (
     <li key={id} className="flex flex-col m-2 w-44">
-      <Image
-        src={coverArtUrl}
-        alt={name}
-        width={170}
-        height={227}
-        // className="aspect-coverArt"
-      />
-      <span className="capitalize text-sm font-bold text-left break-words">
-        {name}
-      </span>
+      <Link href={`/category/${name}`}>
+        <Image
+          src={coverArtUrl}
+          alt={name}
+          width={170}
+          height={227}
+          className="hover:cursor-pointer"
+        />
+      </Link>
+      <Link href={`/category/${name}`}>
+        <span className="capitalize text-sm font-bold text-left break-words hover:cursor-pointer">
+          {name}
+        </span>
+      </Link>
     </li>
   );
 };

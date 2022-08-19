@@ -23,10 +23,11 @@ export const getTwitchCategories = async () => {
   });
 };
 
-export const getLonelyStreams = async (categoryId: string) => {
+export const getLonelyStreams = async (categoryName: string) => {
   const client = createTwitchApiClient();
+  const category = await client.games.getGameByName(categoryName);
   const res = await client.streams.getStreams({
-    game: categoryId,
+    game: category?.id,
     type: "live",
     limit: 100,
   });
